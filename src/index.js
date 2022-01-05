@@ -6,7 +6,7 @@ const productosRouter = require("./routes/productos.routes");
 
 const app = express();
 
-// Settings
+// seteo
 app.set("port", process.env.PORT || 4000);
 
 // Middlewares
@@ -15,10 +15,10 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Routes
+// Rutas
 app.use(productosRouter);
 
-// handling errors
+// middleware manejo de errores
 app.use((err, req, res, next) => {
   return res.status(500).json({
     status: "error",

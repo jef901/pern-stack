@@ -12,12 +12,12 @@ const router = Router();
 
 router.get('/productos', obtenerProductos);
 
-router.get('/producto/10', obtenerUnProducto);
+router.get('/producto/:id', obtenerUnProducto);
 
 router.post('/producto', creandoUnProducto);
 
-router.delete('/producto',borrarProducto);
+router.delete('/producto/:id',borrarProducto);
 
-router.put('/producto', modificarProducto);
+router.put('/producto/:id', modificarProducto);
 
 module.exports = router;
