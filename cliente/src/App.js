@@ -14,6 +14,7 @@ function App() {
    <Routes>
       <Route index path="/" element={ <ProductList/>} />
       <Route path="/producto/nuevo" element={<ProductForm></ProductForm>} />
+      <Route path="/producto/:id/edit" element={<ProductForm />} />
    </Routes>
    </Container>
    </BrowserRouter>

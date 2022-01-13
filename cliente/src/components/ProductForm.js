@@ -1,5 +1,7 @@
 import  { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {useNavigate, useParams } from "react-router-dom";
+
+
 
 import {
     Button,
@@ -8,8 +10,7 @@ import {
     Grid,
     TextField,
     Typography,
-    CircularProgress,
-  } from "@mui/material";
+    } from "@mui/material";
 
   
  
@@ -18,32 +19,55 @@ import {
 export default function ProducForm() {
 
   const navigate = useNavigate();
-  
-  const [loading, setLoading] = useState(false);
+
+  const params = useParams();
+
+  const [editando, setEditando] = useState(false);
 
   const [producto,setProducto] = useState({
     nombre: '',
     descripcion:'',
-    precio: 1,
+    precio: 0.0,
     esfavorito:false,
   })
 
+  const cargarProducto = async (id) => {
+    const res = await fetch("http://localhost:4000/producto/" + id);
+    const data = await res.json();
+    setProducto({ nombre: data.nombre, descripcion: data.descripcion,precio: data.precio });
+    setEditando(true);
+  };
+
+  useEffect(() => {
+    if(params.id) {
+      cargarProducto(params.id)
+    }
+  }, [params.id]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    setLoading(true);
     
-    const res = await fetch("http://localhost:4000/producto", {
+    if (editando) {
+      const res= await fetch(
+        "http://localhost:4000/producto/" + params.id,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(producto),
+        }
+      );
+      await res.json();
+    } else {
+     await fetch("http://localhost:4000/producto", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(producto),
     });
-   const data = await res.json();
-   console.log(data)
-
-    setLoading(false);
-    navigate("/")
-      }
+  }
+   
+   navigate('/')
+  
+  }
   const handleChange = (e) =>
       setProducto({ ...producto, [e.target.name]: e.target.value });
 
@@ -71,6 +95,7 @@ export default function ProducForm() {
                      <TextField  variant="filled"
                           label="Nombre" 
                           name="nombre"
+                          value={producto.nombre}
                           sx={{
                             display: "block",
                             margin: ".5rem 0",
@@ -85,6 +110,7 @@ export default function ProducForm() {
                      <TextField  variant="filled"
                           label="Descripcion"
                           name="descripcion"
+                          value={producto.descripcion}
                           multiline
                           rows={4}
                           sx={{
@@ -100,6 +126,7 @@ export default function ProducForm() {
                      <TextField  variant="filled"
                           label="Precio" 
                           name="precio"
+                          value={producto.precio}
                           type="currency"
                           sx={{
                             display: "block",
