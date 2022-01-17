@@ -14,8 +14,6 @@ import {
 
   
  
-
-
 export default function ProducForm() {
 
   const navigate = useNavigate();
@@ -24,6 +22,7 @@ export default function ProducForm() {
 
   const [editando, setEditando] = useState(false);
 
+  /*se gurda todos los valores del producto en el estado */
   const [producto,setProducto] = useState({
     nombre: '',
     descripcion:'',
@@ -43,34 +42,36 @@ export default function ProducForm() {
       cargarProducto(params.id)
     }
   }, [params.id]);
-
+  {/* se envia el producto metodo POST atreves los metodos se resiven a traves del body en formato JSON */}
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    if (editando) {
-      const res= await fetch(
-        "http://localhost:4000/producto/" + params.id,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(producto),
-        }
-      );
+    try{
+      if (editando) {
+        const res= await fetch(
+          "http://localhost:4000/producto/" + params.id,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(producto),
+          });
+        await res.json();
+      } else {
+       const res = await fetch("http://localhost:4000/producto", 
+       {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(producto),
+      });
       await res.json();
-    } else {
-     await fetch("http://localhost:4000/producto", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(producto),
-    });
+    }
+  navigate('/') 
+  } catch (error) {
+    console.error(error);
   }
-   
-   navigate('/')
-  
   }
   const handleChange = (e) =>
-      setProducto({ ...producto, [e.target.name]: e.target.value });
-
+      setProducto({ ...producto, [e.target.name]: e.target.value }); 
+      {/* e.target.name el nombre del textfiel y e.target.value lo que se va escribieno */}
 
     return (
      <Grid
@@ -91,7 +92,7 @@ export default function ProducForm() {
               Nuevo Producto
              </Typography>
              <CardContent>
-             <form onSubmit={handleSubmit}>
+             <form onSubmit={handleSubmit}> {/*se llama a la funcion handlesubmit al enviar el formulario*/}
                      <TextField  variant="filled"
                           label="Nombre" 
                           name="nombre"
@@ -102,7 +103,7 @@ export default function ProducForm() {
                           }}
                           inputProps={{ style: { color: "white" } }}
                           InputLabelProps={{ style: { color: "white" } }}
-                          onChange={handleChange}
+                        onChange={handleChange} {/* se maneja el evento on change en cada textfield en la funcion handlechange */ }
                           />
 
 
@@ -127,7 +128,7 @@ export default function ProducForm() {
                           label="Precio" 
                           name="precio"
                           value={producto.precio}
-                          type="currency"
+                          type="text"
                           sx={{
                             display: "block",
                             margin: ".5rem 0",

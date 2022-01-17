@@ -3,6 +3,9 @@ import { Button, Card, CardContent, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 
+
+//UseEffect llama a la funcion cargar productos
+
 export default function ProductList() {
     const [productos, setProductos] = useState([]);
 

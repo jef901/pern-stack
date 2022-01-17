@@ -10,9 +10,9 @@ const app = express();
 app.set("port", process.env.PORT || 4000);
 
 // Middlewares
-app.use(cors());
-app.use(morgan("dev"));
-app.use(express.json());
+app.use(cors());    //llamadas a middlewares en el mismo dominio
+app.use(morgan("dev"));   //para ver las llamadas a la url
+app.use(express.json()); // para que express reconozca los objetos json 
 app.use(express.urlencoded({ extended: false }));
 
 // Rutas

@@ -1,10 +1,12 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ProductList from "./components/ProductList";
+import { BrowserRouter, Route, Routes } from "react-router-dom"; //se importa manejadores de ruteo
+import ProductList from "./components/ProductList"; //traemos componentes
 import ProductForm from "./components/ProductForm";
 import Menu from "./components/Navbar";
 
 import { Container } from "@mui/material";
 
+
+//ruteamos y mostramos los componentes
 
 function App() {
   return (
@@ -12,7 +14,7 @@ function App() {
    <Menu/>
    <Container>
    <Routes>
-      <Route index path="/" element={ <ProductList/>} />
+      <Route index path="/" element={ <ProductList/>} /> 
       <Route path="/producto/nuevo" element={<ProductForm></ProductForm>} />
       <Route path="/producto/:id/edit" element={<ProductForm />} />
    </Routes>
